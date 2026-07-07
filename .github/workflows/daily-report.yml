@@ -25,3 +25,7 @@ jobs:
       - name: 메타 데일리 리포트 실행
         shell: powershell
         run: powershell -File scripts\meta-daily-report.ps1
+
+      - name: 구글 데일리 리포트 실행
+        shell: powershell
+        run: powershell -File scripts\google-daily-report.ps1

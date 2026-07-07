@@ -100,7 +100,14 @@ try {
         }
     }
 } catch {
-    $lines.Add("구글 광고 데이터 조회 실패: $_")
+    Write-Host "구글 광고 데이터 조회 실패: $_"
+    exit 0
+}
+
+# 헤더만 있으면 (데이터 없으면) 전송 안 함
+if ($lines.Count -le 2) {
+    Write-Host "구글 광고 데이터 없음 - 슬랙 전송 건너뜀"
+    exit 0
 }
 
 $text    = $lines -join "`n"
