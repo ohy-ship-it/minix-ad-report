@@ -1,0 +1,27 @@
+name: 메타 데일리 리포트
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 매일 UTC 01:00 = 한국 10:00
+  workflow_dispatch:      # 수동 실행 버튼
+
+jobs:
+  report:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: .env 생성
+        shell: powershell
+        run: |
+          @"
+          META_ACCESS_TOKEN=${{ secrets.META_ACCESS_TOKEN }}
+          SLACK_WEBHOOK_META_REPORT=${{ secrets.SLACK_WEBHOOK_META_REPORT }}
+          REPORT_AD_ACCOUNTS=${{ secrets.REPORT_AD_ACCOUNTS }}
+          REPORT_AD_ACCOUNT_NAMES=${{ secrets.REPORT_AD_ACCOUNT_NAMES }}
+          PIPEBOARD_GOOGLE_TOKEN=${{ secrets.PIPEBOARD_GOOGLE_TOKEN }}
+          "@ | Set-Content -Path ".env" -Encoding UTF8
+
+      - name: 메타 데일리 리포트 실행
+        shell: powershell
+        run: powershell -File scripts\meta-daily-report.ps1
