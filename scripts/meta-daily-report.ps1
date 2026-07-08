@@ -15,12 +15,13 @@ $slackHook = $env:SLACK_WEBHOOK_META_REPORT
 $accounts  = ($env:REPORT_AD_ACCOUNTS -split ',') | ForEach-Object { $_.Trim() } | Where-Object { $_ }
 $yesterday = (Get-Date).AddDays(-1).ToString("yyyy-MM-dd")
 
-$acctNameMap = @{}
-if ($env:REPORT_AD_ACCOUNT_NAMES) {
-    foreach ($entry in ($env:REPORT_AD_ACCOUNT_NAMES -split ',')) {
-        $parts = $entry -split ':', 2
-        if ($parts.Count -eq 2) { $acctNameMap[$parts[0].Trim()] = $parts[1].Trim() }
-    }
+$acctNameMap = @{
+    "act_370223898721955"  = "미닉스"
+    "act_876846528408565"  = "컬리"
+    "act_1467742828251405" = "CJ"
+    "act_1194498995371808" = "오늘의집"
+    "act_1010891704382690" = "네이버"
+    "act_1182774429560123" = "쿠팡"
 }
 
 function Format-Won { param($n); $v = [long][double]$n; return ($v.ToString("N0")) + "원" }
