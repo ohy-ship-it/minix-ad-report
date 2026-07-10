@@ -58,7 +58,7 @@ foreach ($acct in $accounts) {
         "PAGE_LIKES"         = @{ actionType = "like";                displayName = "페이지 좋아요" }
     }
     try {
-        $asUrl  = "https://graph.facebook.com/v21.0/$acct/adsets?fields=name,optimization_goal,promoted_object&effective_status=['ACTIVE']&limit=200&access_token=$token"
+        $asUrl  = "https://graph.facebook.com/v21.0/$acct/adsets?fields=name,optimization_goal,promoted_object&limit=200&access_token=$token"
         $asResp = Invoke-RestMethod $asUrl
         foreach ($as in $asResp.data) {
             $po   = $as.promoted_object
@@ -90,11 +90,9 @@ foreach ($acct in $accounts) {
 
     # 광고 단위 인사이트 (전체 페이지)
     $timeRange = '{"since":"' + $yesterday + '","until":"' + $yesterday + '"}'
-    $filtering = [Uri]::EscapeDataString('[{"field":"adset.effective_status","operator":"IN","value":["ACTIVE"]}]')
     $insUrl = "https://graph.facebook.com/v21.0/$acct/insights?level=ad" +
               "&fields=adset_name,ad_name,spend,actions,clicks,cpc,ctr,impressions,reach" +
               "&time_range=" + [Uri]::EscapeDataString($timeRange) +
-              "&filtering=$filtering" +
               "&limit=500&access_token=$token"
 
     $resp = Invoke-RestMethod $insUrl
